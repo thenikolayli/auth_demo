@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mongo
+    volumes:
+      - db_data:/data/db
+    expose:
+      - 27017
+    profiles:
+      - db
+
+volumes:
+  db_data:

@@ -1,0 +1,6 @@
+# for testing
+
+services:
+  db:
+    ports:
+      - "27017:27017"
