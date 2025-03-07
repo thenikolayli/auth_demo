@@ -9,8 +9,6 @@ import {ScrollTrigger} from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger)
 
 const Home = () => {
-    let image_ref: any
-
     onMount(() => {
         document.title = "Home"
 
@@ -26,14 +24,14 @@ const Home = () => {
         }
 
 
-        gsap.fromTo(image_ref, {
+        gsap.fromTo(".home-image", {
             scale: 1.25,
             y: `-${y_offset}%`,
             transformOrigin: "center top"
         }, {
             scale: 1,
                 scrollTrigger: {
-                trigger: image_ref,
+                trigger: ".home-image",
                     start: `center center`,
                     end: "90% center",
                     scrub: true,
@@ -58,8 +56,8 @@ const Home = () => {
                     <h1 class="absolute p-1 z-10 top-[10rem] inset-x-0 mx-auto w-fit text-light font-[Newsreader] font-medium text-5xl drop-shadow-lg">
                         Auth Demo Website
                     </h1>
-                    <img ref={image_ref} src={homejpg} alt="home jpg"
-                         class="w-full"/>
+                    <img src={homejpg} alt="home jpg"
+                         class="home-image w-full"/>
                 </div>
                 <div class="h-screen w-full p-4 bg-dark flex items-center">
                     <div class="w-full flex flex-col items-center font-[Newsreader] text-light">

@@ -14,14 +14,14 @@ backend
 
 ### API Routes:
 ```
-GET /api/models/user/{user_id} -- gets basic user info
-GET /api/models/user -- gets a list of users
-POST /api/models/user -- creates a user
-DELETE /api/models/user -- deletes a user
+GET /api/models/user/{username} -- input: username query param, output: user data of user with that id
+GET /api/models/user -- input: skip and count query param, output: list of count users after skipping skip
+POST /api/models/user -- input: username, email, and password as json, output: new user id
+DELETE /api/models/user -- input: username query param, output: user deleted message
 
-POST /api/account/login -- creates JWT auth cookie for the user
-DELETE /api/account/logout -- removes JWT auth cookie for the user
-GET /api/account/refreshtoken -- refreshes JWT auth cookie for the user
-POST /api/account/ -- creates an account/user model
-DELETE /api/account/ -- deletes an account/user model
+POST /api/account/login -- input: username, password as json, output: JWT auth cookie
+DELETE /api/account/logout -- input: nothing, output: removes JWT auth cookie
+GET /api/account/refreshtoken -- input: request with JWT auth cookie, output: sets a new auth cookie
+POST /api/account/ -- input: username, email, and password as json, output: account created message
+DELETE /api/account/ -- input: request with auth cookie, output: account deleted message
 ```

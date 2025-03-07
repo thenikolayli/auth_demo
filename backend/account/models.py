@@ -10,7 +10,7 @@ class UserModel(BaseModel):
     username: str
     password: str
     email: EmailStr
-    roles: list[str]
+    roles: list[str] | None = None
 
 # model that represents the fields required to login
 class UserLogin(BaseModel):
@@ -19,6 +19,8 @@ class UserLogin(BaseModel):
 
 # validator for the user model
 async def UserValidator(user: UserModel):
+    print(user)
+    banned_characters = "/\\ "
     collection = await get_collection('Users')
     user.roles = [] # users are not allowed to select which roles they have when creating an account
     # check for duplicate username and email
@@ -28,6 +30,9 @@ async def UserValidator(user: UserModel):
         raise HTTPException(detail="Email taken", status_code=status.HTTP_400_BAD_REQUEST)
     if user.username == getenv("ADMIN_USERNAME"):
         user.roles.append("admin")
+    for character in banned_characters:
+        if character in user.username:
+            raise HTTPException(detail=f'Invalid character: "{character}"', status_code=status.HTTP_400_BAD_REQUEST)
     # hash password
     user.password = hash_password(user.password)
 

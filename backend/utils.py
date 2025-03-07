@@ -62,7 +62,7 @@ def refresh_token_pair(refresh_token):
 def require_role(role: str = None):
     async def dependency(request: Request):
         # if in development, skip the check
-        if bool(getenv("DEVELOPMENT")):
+        if getenv("DEVELOPMENT") == "True":
             return
 
         access_token, _ = get_tokens_from_request(request)

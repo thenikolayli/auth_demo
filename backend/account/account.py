@@ -30,8 +30,8 @@ async def login(user_data: UserLogin):
         key=getenv("AUTH_COOKIE_NAME"),
         value=json.dumps({"access": new_access_token, "refresh": new_refresh_token}),
         domain=getenv("AUTH_COOKIE_DOMAIN"),
-        secure=bool(getenv("AUTH_COOKIE_SECURE")),
-        httponly=bool(getenv("AUTH_COOKIE_HTTPONLY")),
+        secure=getenv("AUTH_COOKIE_SECURE") == "True",
+        httponly=getenv("AUTH_COOKIE_HTTPONLY") == "True",
         samesite=getenv("AUTH_COOKIE_SAMESITE"),
         expires=int(getenv("AUTH_COOKIE_REFRESH_AGE"))
     )
@@ -52,18 +52,27 @@ async def logout():
 
     return response
 
-@router.get("/refreshtoken")
+@router.get("/refresh_token")
 async def refresh_token(request: Request):
     # gets tokens and creates an auth cookie
-    access_token, _ = get_tokens_from_request(request)
+    access_token, refresh_token = get_tokens_from_request(request)
     new_access_token, new_refresh_token = refresh_token_pair(refresh_token)
-    response = JSONResponse("Token refreshed", status_code=status.HTTP_200_OK)
+
+    payload = decode_access_token(access_token)
+    user_id = payload["user_id"]
+
+    users = await get_collection('Users')
+    user = await users.find_one({"_id": ObjectId(user_id)})
+    user.pop("password", "_id")
+    user.update({"_id": str(user_id)})
+
+    response = JSONResponse(user, status_code=status.HTTP_200_OK)
     response.set_cookie(
         key=getenv("AUTH_COOKIE_NAME"),
         value=json.dumps({"access": new_access_token, "refresh": new_refresh_token}),
         domain=getenv("AUTH_COOKIE_DOMAIN"),
-        secure=bool(getenv("AUTH_COOKIE_SECURE")),
-        httponly=bool(getenv("AUTH_COOKIE_HTTPONLY")),
+        secure=getenv("AUTH_COOKIE_SECURE") == "True",
+        httponly=getenv("AUTH_COOKIE_HTTPONLY") == "True",
         samesite=getenv("AUTH_COOKIE_SAMESITE"),
         expires=int(getenv("AUTH_COOKIE_REFRESH_AGE"))
     )
@@ -90,7 +99,7 @@ async def delete_account(request: Request):
     response.delete_cookie(
         key=getenv("AUTH_COOKIE_NAME"),
         domain=getenv("AUTH_COOKIE_DOMAIN"),
-        secure=bool(getenv("AUTH_COOKIE_SECURE")),
+        secure=getenv("AUTH_COOKIE_SECURE") == "True",
         samesite=getenv("AUTH_COOKIE_SAMESITE")
     )
 

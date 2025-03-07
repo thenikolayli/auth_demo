@@ -4,14 +4,16 @@ import axios from "axios";
 import gsap from "gsap"
 import UserDataContext from "../util/Context.tsx";
 
-const Login = () => {
+const Register = () => {
     const [username, setUsername] = createSignal("");
+    const [email, setEmail] = createSignal("");
     const [password, setPassword] = createSignal("");
     const [api_response, set_api_response] = createSignal("")
     const context: any = useContext(UserDataContext)
 
+
     onMount(async () => {
-        document.title = "Login"
+        document.title = "Register"
 
         // refreshes the token and checks if the user data array isn't empty
         await context.refresh_token()
@@ -21,14 +23,15 @@ const Login = () => {
     })
 
     // logs the user in and gets the token
-    const login = async (event: any) => {
+    const register = async (event: any) => {
         event.preventDefault()
         try {
             const response = await axios({
                 method: "POST",
-                url: "/api/account/login",
+                url: "/api/account/",
                 data: {
                     "username": username(),
+                    "email": email(),
                     "password": password()
                 },
                 headers: {
@@ -37,9 +40,13 @@ const Login = () => {
             })
 
             set_api_response(response.data)
-            location.assign("/")
         } catch (error: any) {
-            set_api_response(error.response.data)
+            if (error.response.data.detail) {
+                console.log(error.response.data.detail)
+                set_api_response(error.response.data.detail)
+            } else {
+                set_api_response(error.response.data)
+            }
         }
     }
 
@@ -78,9 +85,9 @@ const Login = () => {
             <Sidebar/>
             <div class="w-full min-h-screen bg-dark flex items-center">
                 <div class="flex flex-col items-center w-full text-light font-[Newsreader]">
-                    <form onsubmit={login}
+                    <form onsubmit={register}
                           class="w-fit mt-[1rem] text-2xl text-light p-4 py-5 space-y-[1.5rem] shadow-lg bg-black/10 rounded-lg flex flex-col items-center">
-                        <h1 class="text-4xl text-center">Login</h1>
+                        <h1 class="text-4xl text-center">Register</h1>
                         <div class="relative flex border-b-2 border-light"
                              onmouseenter={() => animate_field_onhover(username, ".username", true)}
                              onmouseleave={() => animate_field_onhover(username, ".username", false)}
@@ -90,6 +97,17 @@ const Login = () => {
                                    oninput={(event) => update_text(event, setUsername, username, ".username")}
                                    type="text" value={username()}/>
                         </div>
+
+                        <div class="relative flex border-b-2 border-light"
+                             onmouseenter={() => animate_field_onhover(email, ".email", true)}
+                             onmouseleave={() => animate_field_onhover(email, ".email", false)}
+                        >
+                            <h1 class="email absolute pl-1 z-10">Email</h1>
+                            <input class="outline-none pl-1"
+                                   oninput={(event) => update_text(event, setEmail, email, ".email")}
+                                   type="email" value={email()}/>
+                        </div>
+
                         <div class="relative flex border-b-2 border-light"
                              onmouseenter={() => animate_field_onhover(password, ".password", true)}
                              onmouseleave={() => animate_field_onhover(password, ".password", false)}
@@ -115,4 +133,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Register
