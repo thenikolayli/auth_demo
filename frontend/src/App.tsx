@@ -3,6 +3,7 @@ import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Profile from "./pages/Profile.tsx";
+import NotFound from "./pages/NotFound.tsx";
 import "./app.css"
 import Lenis from "lenis";
 import {onMount} from "solid-js";
@@ -29,6 +30,7 @@ const App = () => {
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <Route path="/:username" component={Profile} />
+                <Route path="/*" component={NotFound} />
             </Router>
         </UserDataProvider>
     )

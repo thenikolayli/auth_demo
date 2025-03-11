@@ -104,3 +104,16 @@ async def delete_account(request: Request):
     )
 
     return response
+
+@router.get("/{username}")
+async def get_account(username: str):
+    collection = await get_collection('Users')
+    user = await collection.find_one({"username": username})
+    sensitive_values = ["password", "_id", "email", "roles"]
+
+    if not user:
+        return JSONResponse("User not found", status_code=status.HTTP_404_NOT_FOUND)
+
+    for value in sensitive_values:
+        user.pop(value)
+    return JSONResponse(user, status_code=status.HTTP_200_OK)
