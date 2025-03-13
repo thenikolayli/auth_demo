@@ -1,4 +1,8 @@
-# models for the accounta app
+# models for the account app
+
+# makes python look for files in the upper directory as well
+import sys
+sys.path.append("..")
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel, EmailStr

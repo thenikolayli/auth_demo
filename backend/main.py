@@ -3,11 +3,11 @@
 from fastapi import FastAPI, Depends
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.middleware.cors import CORSMiddleware
-from backend.account.account import router as account_router
-from backend.crud.crud import router as crud_router
-from backend.utils import require_role
 from dotenv import load_dotenv
 from os import getenv
+from account.account import router as account_router
+from crud.crud import router as crud_router
+from utils import require_role
 
 # loads env variables for the whole app
 load_dotenv()

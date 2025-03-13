@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     outDir: '../backend/static',
   },
-  base: process.env.VITE_DOCKER ? "/jonk/" : "/static/",
+  base: process.env.VITE_DOCKER ? "/static/" : "/",
   server: {
     port: 3000,
     // forwards all api requests to port 8000 for fastapi

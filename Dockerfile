@@ -12,7 +12,7 @@ FROM python:alpine AS main
 
 # installs dependencies and runs
 COPY --from=build /backend /backend
-RUN apk update && apk add python3 py3-pip py3-virtualenv && pip install pipenv
-RUN pipenv --python /usr/bin/python3 && pipenv install --ignore-pipfile
+WORKDIR /backend
+RUN apk update && apk add python3 py3-pip py3-virtualenv && pip install pipenv && pipenv install --ignore-pipfile
 
-CMD ["pipenv", "run", "uvicorn", "backend.main:app", "--workers", "3"]
+CMD ["pipenv", "run", "uvicorn", "main:app", "--workers", "3"]
