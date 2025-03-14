@@ -2,7 +2,7 @@
 
 services:
   db:
-    # this is so the backend could connect to the db (it's not running in a container within the system during dev)
+    # this is so the backend could connect to the db during development (it's not running in a container within the system during dev)
     ports:
       - "27017:27017"
   proxy:

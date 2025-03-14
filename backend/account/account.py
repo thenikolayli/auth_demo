@@ -12,7 +12,7 @@ from os import getenv
 from bson import ObjectId
 import json
 
-router = APIRouter(prefix="/api/account", tags=["account"])
+router = APIRouter(prefix="/account", tags=["account"])
 
 # endpoint that logs the user in
 @router.post("/login")

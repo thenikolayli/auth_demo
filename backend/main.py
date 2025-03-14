@@ -11,7 +11,7 @@ from utils import require_role
 
 # loads env variables for the whole app
 load_dotenv()
-app = FastAPI(docs_url=None, redoc_url=None, openapi_url="/openapi.json")
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url="/openapi.json", root_path="/api", host="0.0.0.0", port=8000)
 app.include_router(account_router)
 app.include_router(crud_router)
 
@@ -23,6 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/api/")
+@app.get("/")
 async def root(_=Depends(require_role("admin"))):
     return get_swagger_ui_html(openapi_url="/openapi.json", title="Admin Panel")

@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from backend.utils import get_collection, require_role
 from backend.account.models import UserModel, UserValidator
 
-router = APIRouter(prefix="/api/models", tags=["models"])
+router = APIRouter(prefix="/models", tags=["models"])
 
 # endpoint that returns a user given a username
 @router.get("/user/{username}")
