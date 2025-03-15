@@ -25,4 +25,4 @@ app.add_middleware(
 
 @app.get("/")
 async def root(_=Depends(require_role("admin"))):
-    return get_swagger_ui_html(openapi_url="/openapi.json", title="Admin Panel")
+    return get_swagger_ui_html(openapi_url="/api/openapi.json", title="Admin Panel")

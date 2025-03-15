@@ -11,12 +11,11 @@ services:
     hostname: uvicorn
     build: .
     # ties static files so they can be served by the proxy
+    env_file: .env
     volumes:
       - static_files:/backend/static
-#    expose:
-#      - 8000
-    ports:
-      - "8000:8000"
+    expose:
+      - 8000
     depends_on:
       - db
     profiles:
@@ -36,7 +35,6 @@ services:
       - server
     profiles:
       - main
-
 volumes:
   db_data:
   static_files:

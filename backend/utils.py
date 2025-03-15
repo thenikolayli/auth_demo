@@ -8,7 +8,11 @@ from bson import ObjectId
 import json
 
 async def get_collection(collection_name):
-    client = AsyncIOMotorClient(getenv('MONGO_URI'))
+    client = None
+    if getenv("DEVELOPMENT") == "True":
+        client = AsyncIOMotorClient(getenv("MONGO_URI_DEV"))
+    else:
+        client = AsyncIOMotorClient(getenv("MONGO_URI_PROD"))
     db = client["main"] # theres only one db
     collection = db[collection_name]
 
