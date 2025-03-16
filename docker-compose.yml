@@ -8,8 +8,8 @@ services:
     profiles:
       - main
   server:
-    hostname: uvicorn
-    build: .
+#    hostname: uvicorn
+    image: username/repository:version
     # ties static files so they can be served by the proxy
     env_file: .env
     volumes:
@@ -35,6 +35,15 @@ services:
       - server
     profiles:
       - main
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    profiles:
+      - cert
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ${CERT_EMAIL} -d ${CERT_DOMAIN} --agree-tos
+
 volumes:
   db_data:
   static_files:

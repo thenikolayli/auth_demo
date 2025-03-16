@@ -1,7 +1,23 @@
 # Auth Demo Side Project
 
 Simple demo website where I explore FastAPI, MongoDB, and GSAP
-with a simple website that has basic auth functionality.
+with a simple website that has basic auth functionality. I will use this as a template for projects
+that needs auth functionality, anyone can use this as a template for their own projects as well, just make
+sure to credit me in the repo or on the website in some way.
+
+### How to Use: Dev
+1. Clone this repository
+2. Build the docker compose system, only the main profile
+3. Run only the main profile
+
+### How to Use: Prod
+1. Copy docker-compose.yml and .env to the private server to the same directory
+2. Copy nginx.cert.conf to nginx.conf and run docker compose, only the cert profile
+3. After the certificate has been assigned, copy nginx.prod.conf to nginx.conf and run docker compose,
+only the main profile
+* Note: make sure to alter environment variables (dev = False) and nginx confs for your project
+* If you're going to change any frontend code, make sure to delete the static_files volume,
+so a new one with updated frontend code can be generated.
 
 ### Project Structure
 ```
@@ -12,6 +28,7 @@ backend
 ├─ main.py
 └─ utils.py
 ```
+
 ### API Routes
 ```
 GET /api/models/user/{username} -- input: username query param, output: user data of user with that id
@@ -28,9 +45,11 @@ DELETE /api/account/ -- input: request with auth cookie, output: account deleted
 
 ### Environment Variables
 ```
-DB_URI=localhost://27017
+ADMIN_USERNAME=admin
+DEVELOPMENT=False
 CORS_ORIGINS=["http://localhost:3000"]
-DEVELOPMENT=True
+MONGO_URI_DEV=mongodb://localhost:27017
+MONGO_URI_PROD=mongodb://db:27017
 
 AUTH_ACCESS_SECRET=iwuvrehtnmuiodrsmhtv
 AUTH_REFRESH_SECRET=oiwurhntvuiodrsmhtv
@@ -42,8 +61,7 @@ AUTH_COOKIE_SECURE=False
 AUTH_COOKIE_HTTPONLY=True
 AUTH_COOKIE_SAMESITE=Lax
 
-ADMIN_USERNAME=nikolay
+CERT_EMAIL=email2008@example.com
+CERT_DOMAIN=example.com
 ```
 ### Reminders
-* If you're going to change any frontend code, make sure to delete the static_files volume,
-so a new one with updated frontend code can be generated.
