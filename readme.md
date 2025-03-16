@@ -64,4 +64,3 @@ AUTH_COOKIE_SAMESITE=Lax
 CERT_EMAIL=email2008@example.com
 CERT_DOMAIN=example.com
 ```
-### Reminders
