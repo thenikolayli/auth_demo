@@ -12,7 +12,7 @@ const Home = () => {
     onMount(() => {
         document.title = "Home"
 
-        let y_offset = 0;
+        let y_offset
         if (window.innerWidth >= 1024) {
             y_offset = 40
         } else if (window.innerWidth >= 768) {
@@ -52,7 +52,7 @@ const Home = () => {
         <>
             <Sidebar/>
             <div class="max-w-screen min-h-screen">
-                <div class="relative w-full h-[1400px] overflow-hidden">
+                <div class="relative w-full h-screen overflow-hidden">
                     <h1 class="absolute p-1 z-10 top-[10rem] inset-x-0 mx-auto w-fit text-light font-[Newsreader] font-medium text-5xl drop-shadow-lg">
                         Auth Demo Website
                     </h1>

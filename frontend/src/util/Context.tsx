@@ -1,6 +1,5 @@
-import {createContext, createSignal, onMount} from "solid-js";
+import {createContext, createSignal} from "solid-js";
 import axios from "axios";
-
 const UserDataContext = createContext();
 
 export default UserDataContext;
@@ -8,18 +7,7 @@ export default UserDataContext;
 const UserDataProvider = (props: any) => {
     const [user_data, set_user_data] = createSignal({})
 
-    // sends request to delete auth cookie, clears user data
-    const logout = async () => {
-        if (Object.keys(user_data()).length > 0) {
-            await axios({
-                method: "DELETE",
-                url: "/api/account/logout",
-            })
-            set_user_data({})
-            location.assign("/login")
-        }
-    }
-
+    // refreshed jwt, logs out on invalidation
     const refresh_token = async () => {
         try {
             const response = await axios({
@@ -38,21 +26,24 @@ const UserDataProvider = (props: any) => {
         }
     }
 
+// sends request to delete auth cookie, clears user data
+    const logout = async () => {
+        if (Object.keys(user_data()).length > 0) {
+            await axios({
+                method: "DELETE",
+                url: "/api/account/logout",
+            })
+            set_user_data({})
+            location.assign("/login")
+        }
+    }
+
     let context_data = {
         user_data: user_data,
         set_user_data: set_user_data,
-        logout: logout,
         refresh_token: refresh_token,
+        logout: logout
     }
-
-    // gets user data on mount, and refreshes the token every 4 minutes
-    onMount(() => {
-        refresh_token().finally()
-
-        setInterval(() => {
-            refresh_token().finally()
-        }, 4 * 60 * 1000)
-    })
 
     return (
         <UserDataContext.Provider value={context_data}>

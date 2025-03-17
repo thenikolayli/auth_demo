@@ -1,4 +1,4 @@
-import {createSignal, onMount, useContext} from "solid-js";
+import {createEffect, createSignal, onMount, useContext} from "solid-js";
 import Sidebar from "../components/Sidebar.tsx";
 import axios from "axios";
 import gsap from "gsap"
@@ -12,15 +12,16 @@ const Register = () => {
     const context: any = useContext(UserDataContext)
 
 
-    onMount(async () => {
+    onMount(() => {
         document.title = "Register"
+    })
 
-        // refreshes the token and checks if the user data array isn't empty
-        await context.refresh_token()
+    // side effect, runs whenever user_data() is changed
+    createEffect(() => {
         if (Object.keys(context.user_data()).length !== 0) {
             location.assign("/")
         }
-    })
+    }, context.user_data())
 
     // logs the user in and gets the token
     const register = async (event: any) => {

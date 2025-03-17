@@ -7,9 +7,10 @@ sys.path.append("..")
 
 from fastapi import APIRouter, status, Request, Depends
 from fastapi.responses import JSONResponse
-from backend.utils import get_collection, require_role
+from typing import Any
+from backend.utils import get_collection, require_role, hash_password
 from backend.account.models import UserModel, UserValidator
-
+import json
 router = APIRouter(prefix="/models", tags=["models"])
 
 # endpoint that returns a user given a username
@@ -40,6 +41,27 @@ async def create_user(user: UserModel = Depends(UserValidator), _=Depends(requir
     collection = await get_collection("Users")
     new_user = await collection.insert_one(user.model_dump())
     return JSONResponse(str(new_user.inserted_id), status_code=status.HTTP_201_CREATED)
+
+# endpoint that updates a user given a username, field, and value
+@router.patch("/user")
+async def create_user(username: str, field: str, value: Any, _=Depends(require_role("admin"))):
+    collection = await get_collection("Users")
+
+    # special cases for each field
+    match field:
+        case "username":
+            value = value
+        case "roles":
+            value = json.loads(value)
+        case "password":
+            value = hash_password(value)
+
+    result = await collection.update_one({"username": username}, {"$set": {field: value}})
+
+    if result.matched_count == 0:
+        return JSONResponse("no user found", status_code=status.HTTP_404_NOT_FOUND)
+
+    return JSONResponse(f"{username}'s {field} set to {value}", status_code=status.HTTP_200_OK)
 
 # endpoint that deletes a user given a username
 @router.delete("/user/{username}")

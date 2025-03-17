@@ -113,7 +113,17 @@ const Profile = () => {
                                 </h1>
                                 <Show when={context.user_data().username == username}>
                                     <hr class={"w-full border-1 text-light/50 my-4"}/>
-                                    <button class="relative p-1 border-rose-500 border-2 rounded w-fit overflow-hidden"
+                                    <h1 class="text-2xl">Email: {context.user_data().email}</h1>
+                                    <h1 class="text-2xl">Roles: {context.user_data().roles.map((role: string, index: number)=> {
+                                        // if last value, don't add comma
+                                        if (index !== context.user_data().roles.length - 1) {
+                                            return `${role}, `
+                                        } else {
+                                            return `${role}`
+                                        }
+
+                                    })}</h1>
+                                    <button class="relative mt-4 p-1 border-rose-500 border-2 rounded w-fit overflow-hidden"
                                             onmouseenter={() => animate_button_fill({
                                                 start: true,
                                                 bg_selector: ".delete-bg"

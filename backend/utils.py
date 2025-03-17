@@ -18,9 +18,11 @@ async def get_collection(collection_name):
 
     return collection
 
+# hashes a password
 def hash_password(password):
     return sha256_crypt.encrypt(password)
 
+# verifies if password is equal to hashed password
 def verify_password(password, hashed_password):
     return sha256_crypt.verify(password, hashed_password)
 

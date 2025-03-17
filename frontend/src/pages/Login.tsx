@@ -1,8 +1,8 @@
-import {createSignal, onMount, useContext} from "solid-js";
+import {createEffect, createSignal, onMount, useContext} from "solid-js";
+import UserDataContext from "../util/Context.tsx";
 import Sidebar from "../components/Sidebar.tsx";
 import axios from "axios";
 import gsap from "gsap"
-import UserDataContext from "../util/Context.tsx";
 
 const Login = () => {
     const [username, setUsername] = createSignal("");
@@ -10,15 +10,16 @@ const Login = () => {
     const [api_response, set_api_response] = createSignal("")
     const context: any = useContext(UserDataContext)
 
-    onMount(async () => {
+    onMount(() => {
         document.title = "Login"
+    })
 
-        // refreshes the token and checks if the user data array isn't empty
-        await context.refresh_token()
+    // side effect, runs whenever user_data() is changed
+    createEffect(() => {
         if (Object.keys(context.user_data()).length !== 0) {
             location.assign("/")
         }
-    })
+    }, context.user_data())
 
     // logs the user in and gets the token
     const login = async (event: any) => {

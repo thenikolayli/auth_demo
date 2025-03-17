@@ -33,7 +33,8 @@ backend
 ```
 GET /api/models/user/{username} -- input: username query param, output: user data of user with that id
 GET /api/models/user -- input: skip and count query param, output: list of count users after skipping skip
-POST /api/models/user -- input: username, email, and password as json, output: new user id
+POST /api/models/user -- input: username, email, password as json, output: new user id
+PATCH /api/models/user -- input: username, field, value, output: sets field of user to value
 DELETE /api/models/user -- input: username query param, output: user deleted message
 
 POST /api/account/login -- input: username, password as json, output: JWT auth cookie

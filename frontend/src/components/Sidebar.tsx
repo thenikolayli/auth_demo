@@ -4,18 +4,15 @@ import UserDataContext from "../util/Context.tsx";
 import gsap from "gsap";
 
 const Sidebar = () => {
-    let sidebar: any
     let animation: any
     const [showSidebar, setShowSidebar] = createSignal(false)
     const context: any = useContext(UserDataContext)
 
     onMount(async () => {
-        animation = gsap.fromTo(sidebar,
+        animation = gsap.fromTo(".sidebar",
             {x: "100%"},
             {x: "0%", duration: .5, ease: "power2.out", paused: true}
         )
-
-        await context.refresh_token()
     })
 
     const toggleSidebar = () => {
@@ -34,7 +31,7 @@ const Sidebar = () => {
                 <FiCircle class="stroke-primary stroke-2 size-8"/>
             </div>
 
-            <div onmouseleave={toggleSidebar} ref={sidebar} class="fixed right-0 w-[18rem] h-[95%] drop-shadow-lg">
+            <div onmouseleave={toggleSidebar} class="sidebar fixed right-0 w-[18rem] h-[95%] drop-shadow-lg">
                 <div
                     class="absolute z-10 pr-2 pt-4 right-0 bg-primary w-[13rem] h-full text-3xl font-[Newsreader] font-medium text-light">
                     <div class="border-b-2 border-light/40 pb-2"><a href={"/"} class={"text-3xl"}>Auth Demo Website</a></div>
