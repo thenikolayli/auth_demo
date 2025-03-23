@@ -17,7 +17,7 @@ router = APIRouter(prefix="/account", tags=["account"])
 # endpoint that logs the user in
 @router.post("/login")
 async def login(user_data: UserLogin):
-    collection = await get_collection('Users')
+    collection = await get_collection('users')
     user = await collection.find_one({"username": user_data.username})
 
     # if the user doesn't exist
@@ -65,7 +65,7 @@ async def refresh_token(request: Request):
     payload = decode_access_token(access_token)
     user_id = payload["user_id"]
 
-    users = await get_collection('Users')
+    users = await get_collection('users')
     user = await users.find_one({"_id": ObjectId(user_id)})
     user.pop("password", "_id")
     user.update({"_id": str(user_id)})
@@ -85,7 +85,7 @@ async def refresh_token(request: Request):
 
 @router.post("/")
 async def create_account(user: UserModel = Depends(UserValidator)):
-    collection = await get_collection('Users')
+    collection = await get_collection('users')
     await collection.insert_one(user.model_dump())
     return JSONResponse("Account created", status_code=status.HTTP_201_CREATED)
 
@@ -96,7 +96,7 @@ async def delete_account(request: Request):
     payload = decode_access_token(access_token)
     user_id = payload["user_id"]
 
-    collection = await get_collection('Users')
+    collection = await get_collection('users')
     await collection.delete_one({"_id": ObjectId(user_id)})
 
     response = JSONResponse("Account deleted", status_code=status.HTTP_200_OK)
@@ -111,7 +111,7 @@ async def delete_account(request: Request):
 
 @router.get("/{username}")
 async def get_account(username: str):
-    collection = await get_collection('Users')
+    collection = await get_collection('users')
     user = await collection.find_one({"username": username})
     sensitive_values = ["password", "_id", "email", "roles"]
 

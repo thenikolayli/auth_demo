@@ -25,7 +25,7 @@ class UserLogin(BaseModel):
 async def UserValidator(user: UserModel):
     print(user)
     banned_characters = "/\\ "
-    collection = await get_collection('Users')
+    collection = await get_collection('users')
     user.roles = [] # users are not allowed to select which roles they have when creating an account
     # check for duplicate username and email
     if await collection.count_documents({"username": user.username}) > 0:

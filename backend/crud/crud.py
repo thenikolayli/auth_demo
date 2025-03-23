@@ -43,9 +43,9 @@ async def create_user(user: UserModel = Depends(UserValidator), _=Depends(requir
     return JSONResponse(str(new_user.inserted_id), status_code=status.HTTP_201_CREATED)
 
 # endpoint that updates a user given a username, field, and value
-@router.patch("/user")
+@router.patch("/user", tags=["user"])
 async def create_user(username: str, field: str, value: Any, _=Depends(require_role("admin"))):
-    collection = await get_collection("Users")
+    collection = await get_collection("users")
 
     # special cases for each field
     match field:
@@ -64,9 +64,9 @@ async def create_user(username: str, field: str, value: Any, _=Depends(require_r
     return JSONResponse(f"{username}'s {field} set to {value}", status_code=status.HTTP_200_OK)
 
 # endpoint that deletes a user given a username
-@router.delete("/user/{username}")
+@router.delete("/user/{username}", tags=["user"])
 async def delete_user(username: str, _=Depends(require_role("admin"))):
-    collection = await get_collection("Users")
+    collection = await get_collection("users")
     deleted_user = await collection.delete_one({"username": username})
 
     if deleted_user.deleted_count == 0:
