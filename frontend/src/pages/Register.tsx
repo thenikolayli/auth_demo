@@ -12,16 +12,14 @@ const Register = () => {
     const context: any = useContext(UserDataContext)
 
 
-    onMount(() => {
-        document.title = "Register"
-    })
+    onMount(() => document.title = "Register")
 
     // side effect, runs whenever user_data() is changed
     createEffect(() => {
-        if (Object.keys(context.user_data()).length !== 0) {
+        if (context.user_data()) {
             location.assign("/")
         }
-    }, context.user_data())
+    })
 
     // logs the user in and gets the token
     const register = async (event: any) => {

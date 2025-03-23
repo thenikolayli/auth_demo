@@ -1,11 +1,16 @@
-import {createContext, createSignal} from "solid-js";
+import {createContext, createEffect, createSignal} from "solid-js";
 import axios from "axios";
 const UserDataContext = createContext();
 
 export default UserDataContext;
 
 const UserDataProvider = (props: any) => {
-    const [user_data, set_user_data] = createSignal({})
+    const [user_data, set_user_data] = createSignal<any>(null)
+    const [data_loaded, set_data_loaded] = createSignal(false)
+
+    createEffect(() => {
+        set_data_loaded(user_data() !== null)
+    })
 
     // refreshed jwt, logs out on invalidation
     const refresh_token = async () => {
@@ -19,16 +24,17 @@ const UserDataProvider = (props: any) => {
             })
             set_user_data(response.data)
         } catch (error: any) {
-            // if the auth token is invalid, log the user out
-            if (error.status === 401) {
+            if (error.status === 404) { // invalid token
                 await logout()
+            } else { // not logged in
+                set_user_data({})
             }
         }
     }
 
 // sends request to delete auth cookie, clears user data
     const logout = async () => {
-        if (Object.keys(user_data()).length > 0) {
+        if (user_data()) {
             await axios({
                 method: "DELETE",
                 url: "/api/account/logout",
@@ -42,7 +48,8 @@ const UserDataProvider = (props: any) => {
         user_data: user_data,
         set_user_data: set_user_data,
         refresh_token: refresh_token,
-        logout: logout
+        logout: logout,
+        data_loaded: data_loaded
     }
 
     return (

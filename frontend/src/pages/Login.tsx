@@ -10,16 +10,14 @@ const Login = () => {
     const [api_response, set_api_response] = createSignal("")
     const context: any = useContext(UserDataContext)
 
-    onMount(() => {
-        document.title = "Login"
-    })
+    onMount(() => document.title = "Login")
 
     // side effect, runs whenever user_data() is changed
     createEffect(() => {
-        if (Object.keys(context.user_data()).length !== 0) {
+        if (context.user_data()) {
             location.assign("/")
         }
-    }, context.user_data())
+    })
 
     // logs the user in and gets the token
     const login = async (event: any) => {
