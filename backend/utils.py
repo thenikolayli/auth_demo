@@ -74,7 +74,7 @@ def require_role(role: str = None):
         access_token, _ = get_tokens_from_request(request)
         payload = decode_access_token(access_token)
         user_id = ObjectId(payload["user_id"])
-        collection = await get_collection("Users")
+        collection = await get_collection("users")
         user = await collection.find_one({"_id": user_id})
 
         if not user:

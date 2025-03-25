@@ -16,7 +16,7 @@ const Register = () => {
 
     // side effect, runs whenever user_data() is changed
     createEffect(() => {
-        if (context.user_data()) {
+        if (context.user_data()?.username) {
             location.assign("/")
         }
     })

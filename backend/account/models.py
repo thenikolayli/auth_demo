@@ -21,6 +21,11 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
+class UserPatchModel(BaseModel):
+    id: str
+    field: str
+    value: str
+
 # validator for the user model
 async def UserValidator(user: UserModel):
     print(user)
