@@ -23,10 +23,10 @@ services:
   proxy:
     image: nginx:latest
     volumes:
-      - static_files:/backend/static
+      - static_files:/app/static
       - ./nginx.conf:/etc/nginx/nginx.conf # uses custom nginx conf
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - certs:/etc/letsencrypt
+      - challenges:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
@@ -38,12 +38,14 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - certs:/app/certs
+      - challenges:/app/challenges
     profiles:
       - cert
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email ${CERT_EMAIL} -d ${CERT_DOMAIN} --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email email@example.com -d example.com --agree-tos
 
 volumes:
   db_data: # only for data persistence
   static_files: # for accessing static files between the server (build container) and reverse proxy
+  certs: # ssl certs
+  challenges: # letsencrypt challenges
