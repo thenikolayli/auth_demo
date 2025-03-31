@@ -25,8 +25,8 @@ services:
     volumes:
       - static_files:/app/static
       - ./nginx.conf:/etc/nginx/nginx.conf # uses custom nginx conf
-      - certs:/etc/letsencrypt
-      - challenges:/var/www/certbot
+      - certs:/app/certs
+      - challenges:/app/challenges
     ports:
       - "80:80"
       - "443:443"
@@ -38,8 +38,8 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - certs:/app/certs
-      - challenges:/app/challenges
+      - certs:/etc/letsencrypt
+      - challenges:/var/www/certbot
     profiles:
       - cert
     command: certonly --webroot -w /var/www/certbot --force-renewal --email email@example.com -d example.com --agree-tos
