@@ -45,5 +45,5 @@ services:
     command: certonly --webroot -w /var/www/certbot --force-renewal --email ${CERT_EMAIL} -d ${CERT_DOMAIN} --agree-tos
 
 volumes:
-  db_data:
-  static_files:
+  db_data: # only for data persistence
+  static_files: # for accessing static files between the server (build container) and reverse proxy
