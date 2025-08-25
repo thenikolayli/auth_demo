@@ -1,11 +1,6 @@
 # Auth Demo Side Project
 
-Simple demo website where I explore FastAPI, MongoDB, and GSAP
-with a simple website that has basic auth functionality. I will use this as a template for projects
-that needs auth functionality, anyone can use this as a template for their own projects as well, just make
-sure to credit me in the repo or on the website in some way.
-
-This is for a single website that is the only one being hosted on a server, you will have to have a different setup if you want to host multiple websites on one machine. 
+Simple demo website where I experimented using FastAPI, MongoDB, and GSAP.
 
 ### How to Use: Dev
 1. Clone this repository
